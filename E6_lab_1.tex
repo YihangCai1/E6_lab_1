@@ -1,0 +1,328 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage{amsmath}
+\usepackage[utf8]{inputenc}
+\usepackage{bm}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\setlength{\parskip}{0.15in}
+\usepackage{caption}
+\captionsetup{font={small,it}}
+
+\title{3D Concurrent Force Analysis}
+\author{Kinley Zangmo, Yinuo Gao, Lawrence Cai}
+\date{February 18, 2026}
+
+\begin{document}
+	
+\begin{titlepage}
+	\centering
+	\vspace*{4cm}
+	
+	{\Huge 3D Concurrent Force Analysis \par}
+	\vspace{0.5cm}
+	
+	{\Large ENGR 006 Mechanics \par}
+	\vspace{2cm}
+	
+	{\Large Kinley Zangmo, Yinuo Gao, Lawrence Cai \par}
+	\vspace{0.5cm}
+	
+	{\large February 18, 2026 \par}
+	
+	\vfill
+\end{titlepage}
+
+\begin{abstract}
+This experiment consists of manipulating a 3-D concurrent force system. There are three strings in this system whose one end each ties to a graduated cylinder filled with water, and the other side ties to the center weight over a pulley with fixed position. The system is in equilibrium. By changing the volume of water in the graduated cylinders, the position of the center mass changes significantly from previous position, but the system again attains static equilibrium with tension forces that differ in both magnitudes and directions. By moving the center weight away from its current position, the static equilibrium reestablishes with a deviation from the original position. Subsequent analysis shows that the tension forces do not equal to the weight of the graduated cylinders, signaling that the system is not ideal and involves friction that prompts a range of possible equilibrium positions of the center mass. This experiment shows that the real world application of 3-D concurrent forces to precisely control the position of a weight may be compromised due to the inaccuracy created by friction, while the range of movement of the center weight can be limited because of the need to maintain the position of counterweights. 
+\end{abstract}
+
+\section{Introduction}
+In mechanics, 3-D concurrent force systems refer to systems consisting of multiple forces acting on a 3-dimensional space (x,y and z axes). Each force’s line of action intersects at a single common point, bringing the entire system into a static equilibrium where the central resultant force and moment becomes zero. Concurrent force systems are widely applied in our day-to-day lives ranging for instance from a vlogger’s tripods to stage lighting systems of a theatrical production. These systems are crucial and are thus studied and applied in various engineering fields: i.e; in civil engineering to assess and determine tensions in cables, trusses, construction cranes or suspension bridges, human movement analysis in biomedical engineering to designing robotic arms in robotic engineering. 
+
+Owing to its significance, in this report we hope to foster a stronger understanding of 3-D concurrent force systems and static equilibrium achieved through conducting a simple experiment to calculate the tensions of a 3-force pulley system connected to a central weight in a 3-D space. The experiment will be conducted using three separate counter-weights attached to a central pulley using cords. The three cords will be attached to a central weight; i.e; a spotlight. We will first take measurements of the (x,y and z) coordinates of the counter-weights alongside  the coordinates of the spotlight as the system slowly comes into a static equilibrium due to the three relative forces being balanced. This experiment will be repeated two times with varying weight of the counter-weights, while repeating two trials each with new coordinates of central weight as it positions itself to balance the forces. 
+
+We will have to find the corrected-z coordinates of each counter-weights which accounts for the radius of the respective pulleys. These corrected z-axes will then be used as the z coordinates for the original coordinates of the counter-weights. Given that we now know all the coordinates, we will then find the tensions in the three cords for two trials each of the original counter-weights and changed weights of the counter-weights. The tension will be found using matlab. However, we also need to address the fact that the pulley used in the experiment is not ideal, which means that the friction is not negligible. Hence in order to account for the deviation from static equilibrium due to friction, we will finally calculate the percent error in the tension by comparing the calculated tensions to the combined weights of the counter-weights. 
+
+\section{Theory}
+\subsection{How to calculate tension forces}
+The experiment is a 3D equilibrium system where there is no linear or rotational motion. The entire system is at rest. This means that there is no acceleration on the x-axis, y-axis, and the z-axis. To achieve 3D equilibrium, there should be no acceleration thus no net force in all three dimensions as F = ma (and a should be zero). Thus, we could write the equation as:
+\begin{equation}
+	\bm{T}_2 + \bm{T}_3 + \bm{T}_4 + \bm{W} = 0
+\end{equation}
+where T1, T2,T3  are the tension in the rope, and W is the weight of the central mass. 
+
+To express the equation with unit vectors, the equation would be demonstrated as following: 
+\begin{align}
+	\bm{T}_2 &= T_2 \hat{\bm{\lambda}}_2 \\
+	\bm{T}_3 &= T_3 \hat{\bm{\lambda}}_3 \\
+	\bm{T}_4 &= T_4 \hat{\bm{\lambda}}_4 \\
+	\bm{W}   &= -W \hat{\bm{k}}
+\end{align}
+
+Substitute the tension and weights with unit vectors back into the summation, the equation would give:
+\begin{equation}
+	T_2(\lambda_{2x} \hat{\bm{\imath}} + \lambda_{2y} \hat{\bm{\jmath}} + \lambda_{2z} \hat{\bm{k}}) + T_3(\lambda_{3x} \hat{\bm{\imath}} + \lambda_{3y} \hat{\bm{\jmath}} + \lambda_{3z} \hat{\bm{k}}) + T_4(\lambda_{4x} \hat{\bm{\imath}} + \lambda_{4y} \hat{\bm{\jmath}} + \lambda_{4z} \hat{\bm{k}}) -W\hat{\bm{k}} = 0
+\end{equation}
+
+If we rewrite this equation into a system of equations concerning the summation of forces along the x, y, and z directions, we would get:
+\begin{align}
+	T_2\lambda_{2x} + T_3\lambda_{3x} + T_4\lambda_{4x} &= 0 \\
+	T_2\lambda_{2y} + T_3\lambda_{3y} + T_4\lambda_{4y} &= 0 \\
+	T_2\lambda_{2z} + T_3\lambda_{3z} + T_4\lambda_{4z} &= W
+\end{align}
+Further rewriting into a matrix:
+\begin{equation}
+\begin{bmatrix}
+	\lambda_{2x} & \lambda_{3x} & \lambda_{4x} \\
+	\lambda_{2y} & \lambda_{3y} & \lambda_{4y} \\
+	\lambda_{2z} & \lambda_{3z} & \lambda_{4z}
+\end{bmatrix}
+\begin{bmatrix}
+	T_2 \\ T_3 \\ T_4
+\end{bmatrix} = 
+\begin{bmatrix}
+	0 \\ 0 \\ W
+\end{bmatrix}
+\end{equation}
+
+The equation above would give calculated tension for the ropes in the system. In an ideal case, the tension would equal to the weight pulling the rope. However, in an experiential condition, it is hard for the rope to reflect ideal tension due to the existence of friction force between the rope and the pulley. 
+
+\subsection{How to calculate the true Z}
+Small pulley approximation is a convenient approximation where we can normally ignore the radius of a pulley that is used to hook ends of cords to the central mass. This therefore assumes that the unit vectors of each cords point from the central weight (central knot) to the center axis of each pulley. However in reality, the cords are attached to a point external to the pulley. ( point above the pulley in our case). 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{figure_1.png}
+	\caption{Diagram showing central weight balanced by counter-weights using small pulley approximation.}
+	\label{fig1}
+\end{figure}
+
+Therefore in order to find the true coordinates for our tension vectors, we will need to first find  the corrected z-coordinates of each counter-weights, which are the actual height of each counter-weights if we dis-regard the small-pulley approximation. In order to calculate that, we will need to have some basic geometric understanding about right-angled triangles and angles. 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{figure_2.png}
+	\caption{diagram of one pulley showing the required correction of z-coordinate (z’)}
+	\label{fig2}
+\end{figure}
+
+\textbf{Finding angle $\alpha$} 
+
+This is the angle that the cord (as shown in the diagram) makes to the central knot (A) with respect to the horizontal axis. ($\angle EAF$)
+
+We know that:
+\begin{equation}
+	\tan(\alpha) = \frac{opposite}{adjacent} = \frac{z}{a-r_2}
+\end{equation}
+
+\begin{equation}
+	\overline{AC} = a = \sqrt{x^2+y^2}
+\end{equation}
+where AC is the horizontal distance between points A and C, and z is the z-coordinate of B,
+\begin{equation}
+	\alpha = \arctan(\frac{z}{a-r_2})
+\end{equation}
+
+\textbf{Finding angle $\beta$} 
+
+$\beta$ is the angle $\angle GAF$, the angle that the point of the central weight makes with the central and the end of the pulley. We know that:
+\begin{equation}
+	\sin(\beta) = \frac{opposite}{hypotenuse}
+\end{equation}
+
+The angle at the vertex G is right-angle since the rope is tangent to the pulley at the point of contact. This means the hypotenuse of the triangle $GAF$ and $AEF$ are the same. The opposite side-length of the right-angle triangle ($GAF$) corresponds to the radius of the pulley, r2 while the hypotenuse corresponds to the distance between points $A$ and $F$.
+\begin{equation}
+	\overline{AF} = \sqrt{(a - r_2)^2 + z^2}
+\end{equation}
+Knowing that the horizontal component is (a-r2) and the vertical component is (z), we simply use Pythagorean theorem to find the value of hypotenuse.
+
+This gives us:
+\begin{equation}
+	\sin(\beta) = \frac{r_2}{\sqrt{(a-r_2)^2+z^2}}
+\end{equation}
+
+\begin{equation}
+	\beta = \arcsin\left(\frac{r_2}{\sqrt{(a-r_2)^2+z^2}}\right)
+\end{equation}
+
+\textbf{Coordinates of the projected point D}
+
+The angle $\theta$ of $\angle CAD$, is given by the sum of the two angles $\alpha$ and $\beta$ that we found earlier. Given that we know this angle, we can now use this to find the unknown z’ coordinate of the point $D$ as follows;
+
+\begin{equation}
+	\tan(\theta) = \frac{z'}{a}
+\end{equation}
+Re-writing the equation in terms of $\alpha$ and $\beta$ and re-arranging to get z’:
+\begin{equation}
+	z' = a\tan(\alpha + \beta)
+\end{equation}
+
+Now that we have found the corrected z coordinate of the point, we can insert this z-coordinate in the place of the initial z coordinate that we have measured previously to get accurate coordinates of the counter-weights. These new coordinates can then be used to calculate the vectors required for tension calculations. 
+
+\subsection{How to calculate percentage error}
+The percentage error reflects the percentage of deviation of experimental data from the theoretical values. The general formula is given by the following:
+\begin{equation}
+	\% error = \frac{|theoretical - experimental|}{theoretical} \times 100\%
+\end{equation}
+
+In this case, to represent the deviation of weights from the actual tensions calculated in percentage, we first sum the three weights together into a total weight in the system, and then we do the same to the magnitude of the three tension forces into a total tension force. The weights should be the theoretical force since it represents the total force under ideal circumstances (i.e. no friction) that is applied to the string, which is further transmitted to the center mass as tension force. However, due to unideal conditions, the presence of friction will create resistance opposite to the direction of application and thus the actual tension in the string is lower than the weight. Our equation then becomes:
+\begin{equation}
+	\% error = \frac{|\Sigma w - \Sigma T|}{\Sigma w} \times 100\%
+\end{equation}
+Where w represents the magnitude of the weight and T represents the magnitude of the tension. 
+
+For the sake of accuracy, we have changed the position of the center weight and let it reestablish equilibrium. Since there are no modifications on the weight of the counter weights nor the position of the pulleys, this counts as another trial that represents the same system. By doing another trial, we take into account the fact that a range of possible positions and rope tension is possible. We thus calculate the average of the two percent errors by summing them and divide them by 2:
+\begin{equation}
+	\% error = \frac{\% error_1 + \% error_2}{2}
+\end{equation}
+where $\% error1$ and $\% error2$ represents the percent error calculated from the data of the first trial and second trial, respectively.
+
+After modifying the weights of the three counterweights, the system also changes. We produced two trials for the same reason outlined above for our previous system. We apply the same percent error calculation, sum, and average of percent errors. Eventually, we get two percent error values from the two sets of counterweights (before and after the change) in our experiment.
+
+\section{Procedure}
+\subsection{Procedure steps}
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{figure_3.png}
+	\caption{stage light set-up}
+	\label{fig3}
+\end{figure}
+
+\textbf{Materials Required: }
+\begin{itemize}
+	\item Pulleys attached on different corners of the wall (3x)
+	\item Large graduated cylinders(3x)
+	\item Cords (3x)
+	\item Water
+	\item Central spotlight (a known weight attached to laser pointer)
+	\item Ruler (feet/inches)
+	\item Black and white grid on floor
+	\item Marking stickers
+	\item Weighing scale
+\end{itemize}
+\textbf{Procedure:}
+\begin{enumerate}
+	\item Three cords were attached to counter-weights, (water-filled graduated cylinders) were hung from three pulleys in different positions. 
+	\item The other end of the cords were then hooked onto a central weight (laser pointer) in between the counter-weights.
+	\item Given the initial set-up of the pulley and the counter-weights, we measured the individual weights (pounds) of the three attached counter-weights using a weighing scale. The weight of the central weight remains constant.
+	\item Assuming that the counter-weights remain in a fixed position, we then measured the coordinates of the counter-weights using a scaled ruler, recording the units in inches, using marking stickers to mark the respective positions. 
+	\item Using the initial set-up therefore, we measured the coordinates of the central spotlight as the weight brought itself into static equilibrium as an effect of the tension along the counter-weights. 
+	\item The z-coordinates for the central-weight were recorded using the laser pointer, adding onto its own height to find the exact z-coordinates.
+	\item Two trials were conducted using the same initial set-up by attempting to move the central weight and recording its new coordinates as it balances to its new position.
+	\item After the two trials, we then altered the weights of the counter-weights by adding water into the graduated cylinders, before recording their new weights in pounds using the weighing scales. 
+	\item Hence using this new set-up we then repeated steps 5 through 7.
+\end{enumerate}
+\section{Results}
+\textbf{Corrected Z}
+\begin{table}[!h]
+	\centering
+	\caption{Corrected Z-coordinates of the three pulleys across trials.}
+	\label{tab:z-values}
+	\begin{tabular}{l S[table-format=3.5] S[table-format=3.5] S[table-format=3.5]}
+		\toprule
+		& {Pulley 2} & {Pulley 3} & {Pulley 4} \\
+		\midrule
+		Uncorrected & 116.61417 & 116.69291 & 116.73228 \\
+		Trial 1\_1  & 118.4912  & 118.4853  & 118.8846  \\
+		Trial 1\_2  & 118.4526  & 118.4460  & 118.9661  \\
+		Trial 2\_1  & 118.3646  & 118.3340  & 119.2479  \\
+		Trial 2\_2  & 118.4551  & 118.3987  & 119.0179  \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\text{Sample Calculation of Pulley 2, Trial 1\_1:}
+
+\[
+\begin{aligned}
+	a = \sqrt{(-95.75 - 0.25)^2 + (-68 + 9)^2} &= 112.6810 \\
+	a - r = 112.6810 - 0.75 &= 111.9310 \\
+	\alpha = \arctan\!\left(\frac{116.61417}{111.9310}\right) &= 46.1739^\circ \\
+	\beta = \arcsin\!\left(\frac{0.75}{\sqrt{111.9310^2 + 0.75^2}}\right) &= 0.2659^\circ \\
+	\theta = 46.1739^\circ + 0.2659^\circ &= 46.4398^\circ \\
+	z' = 112.6810 \times \tan(46.4398^\circ) &= 118.4912
+\end{aligned}
+\]
+\textbf{Tensions}
+
+\begin{table}[!h]
+	\centering
+	\caption{Tensions across trials.}
+	\label{tab:tensions}
+	\begin{tabular}{l S[table-format=3.5] S[table-format=3.5] S[table-format=3.5]}
+		\toprule
+		& {Tension 2} & {Tension 3} & {Tension 4} \\
+		\midrule
+		Trial 1\_1  & 1.7053 & 1.6049 & 2.8746  \\
+		Trial 1\_2  & 1.7181 & 1.5607 & 2.9399  \\
+		Trial 2\_1  & 2.2614 & 1.4856 & 3.5641  \\
+		Trial 2\_2  & 2.2845 & 1.5476 & 3.4495  \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+\text{Sample Calculation of Tensions for Trial 1\_1}
+
+\[
+\begin{bmatrix}
+	-0.7555 & -0.7138 & 0.8467 \\
+	-0.4643 & 0.5456 & -0.0292 \\
+	0.4623 & 0.4390 & 0.5312
+\end{bmatrix}
+\begin{bmatrix}
+	T_2 \\ T_3 \\ T_4
+\end{bmatrix} = 
+\begin{bmatrix}
+	0 \\ 0 \\ 3.02
+\end{bmatrix}
+\]
+\[
+\begin{bmatrix}
+	T_2 \\ T_3 \\ T_4
+\end{bmatrix} = 
+\begin{bmatrix}
+	-0.7555 & -0.7138 & 0.8467 \\
+	-0.4643 & 0.5456 & -0.0292 \\
+	0.4623 & 0.4390 & 0.5312
+\end{bmatrix} ^{-1}
+\begin{bmatrix} 
+	0 \\ 0 \\ 3.02
+\end{bmatrix}
+\]
+\[
+\begin{bmatrix}
+	T_2 \\ T_3 \\ T_4
+\end{bmatrix} = 
+\begin{bmatrix} 
+	1.7053 \\ 1.6049 \\ 2.8746
+\end{bmatrix}
+\]
+
+\textbf{Percent Error}
+\begin{table}[!htbp]
+	\centering
+	\caption{Summed tensions and weights with within-trial averages.}
+	\label{tab:sum-avg}
+	\begin{tabular}{lccc}
+		\toprule
+		Trial & Sum Tensions & Sum Weights & \%Error \\
+		\midrule
+		Trial 1\_1 & 6.1848 & 6.3175 & 2.10\% \\
+		Trial 1\_2 & 6.2188 & 6.3175 & 1.56\% \\
+		\textbf{Trial 1 Avg.} & \textbf{6.2018} & \textbf{6.3175} & \textbf{1.83\%} \\
+		\midrule
+		Trial 2\_1 & 7.3111 & 7.5400 & 3.04\% \\
+		Trial 2\_2 & 7.2816 & 7.5400 & 3.43\% \\
+		\textbf{Trial 2 Avg.} & \textbf{7.2964} & \textbf{7.5400} & \textbf{3.23\%} \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\text{Sample Calculation for Trial 1 Average}
+\[ 1.7053 + 1.6049 + 2.8746 = 6.1848 \]
+\[ 1.7181 + 1.5607 + 2.9399 = 6.2188 \]
+\[ \frac{|6.1848 - 6.3175|}{6.3175} \times 100\% = 2.10\%\]
+\[ \frac{|6.2188 - 6.3175|}{6.3175} \times 100\% = 1.56\%\]
+\[ \frac{2.10\% + 1.56\%}{2} = 1.83\%\]
+
+\end{document}
