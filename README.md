@@ -4,7 +4,7 @@
 - Collaborator of MatLab
 - Introduction
 - Theory (z' calculation)
-- Procedure (methods)
+- Procedure (methods) and Figure 3
 - First part of conclusion
 - Acknowledgement
 - Reference
