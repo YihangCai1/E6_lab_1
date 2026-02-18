@@ -54,8 +54,9 @@ function lab1()
         lam2 = findLam(w2, c); % Find the three corrected tension unit vectors.
         lam3 = findLam(w3, c);
         lam4 = findLam(w4, c);
-        matrix = [lam2;lam3;lam4]' % Assemble the matrix, and solve for the system using the known constant weight. 
-        tensions = matrix\[0;0;wt]; % or we can use: tensions = inv(matrix)*[0;0;wt], as discussed on class.
+        matrix = [lam2;lam3;lam4]'; % Assemble the matrix, and solve for the system using the known constant weight. 
+        tensions = matrix\[0;0;wt];
+        matrix = [lam2;lam3;lam4]% or we can use: tensions = inv(matrix)*[0;0;wt], as discussed on class.
     end
     
     % The function that returns the percent error as a vector.
